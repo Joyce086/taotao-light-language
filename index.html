@@ -801,6 +801,53 @@
       });
       setTimeout(()=>audio.close(),750);
     }
+    const lightHeroMelody=[
+      392,523.25,659.25,783.99,659.25,587.33,523.25,392,
+      440,523.25,587.33,659.25,783.99,659.25,587.33,523.25
+    ];
+    const lightHeroBass=[130.81,174.61,196,130.81];
+    let musicContext=null,musicGain=null,musicTimer=null,musicStep=0;
+    function musicTone(frequency,duration,volume,type){
+      if(!musicContext||!musicGain) return;
+      const now=musicContext.currentTime;
+      const gain=musicContext.createGain(),tone=musicContext.createOscillator();
+      tone.type=type;tone.frequency.setValueAtTime(frequency,now);
+      gain.gain.setValueAtTime(.0001,now);
+      gain.gain.exponentialRampToValueAtTime(volume,now+.045);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+      tone.connect(gain);gain.connect(musicGain);tone.start(now);tone.stop(now+duration+.05);
+    }
+    function musicPulse(){
+      if(!musicContext||!musicGain) return;
+      const frequency=lightHeroMelody[musicStep%lightHeroMelody.length];
+      musicTone(frequency,.52,.085,"triangle");
+      musicTone(frequency*2,.24,.022,"sine");
+      if(musicStep%4===0) musicTone(lightHeroBass[(musicStep/4)%lightHeroBass.length],1.35,.055,"sine");
+      musicStep=(musicStep+1)%lightHeroMelody.length;
+    }
+    function startMusic(){
+      if(muted) return;
+      const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+      if(!AudioContextClass) return;
+      if(!musicContext){
+        musicContext=new AudioContextClass();musicGain=musicContext.createGain();
+        musicGain.gain.value=.0001;musicGain.connect(musicContext.destination);
+      }
+      musicContext.resume();
+      const now=musicContext.currentTime;
+      musicGain.gain.cancelScheduledValues(now);
+      musicGain.gain.setValueAtTime(Math.max(musicGain.gain.value,.0001),now);
+      musicGain.gain.exponentialRampToValueAtTime(.09,now+.6);
+      if(musicTimer===null){musicPulse();musicTimer=setInterval(musicPulse,430);}
+    }
+    function muteMusic(isMuted){
+      if(!musicContext||!musicGain){if(!isMuted) startMusic();return;}
+      const now=musicContext.currentTime;
+      musicGain.gain.cancelScheduledValues(now);
+      musicGain.gain.setValueAtTime(Math.max(musicGain.gain.value,.0001),now);
+      musicGain.gain.exponentialRampToValueAtTime(isMuted?.0001:.09,now+.28);
+      if(!isMuted) musicContext.resume();
+    }
     function render() {
       const m = missions[index];
       locked = false;
@@ -846,9 +893,10 @@
         else {index++;render();}
       });
     }
-    function begin() { index=0;energy=0;show("mission");render();speak("桃桃准备好了吗 光之变身 一起出发吧","gentle"); }
+    function begin() { startMusic();index=0;energy=0;show("mission");render();speak("桃桃准备好了吗 光之变身 一起出发吧","gentle"); }
     function transformHero() {
       if(heroTransformed) return;
+      startMusic();
       heroTransformed=true;
       $("heroMorph").classList.add("is-tiga");
       $("heroMorph").setAttribute("aria-pressed","true");
@@ -867,6 +915,7 @@
     $("sound").addEventListener("click",()=>{
       muted=!muted; $("sound").textContent=muted?"🔇":"🔊";
       $("sound").setAttribute("aria-label",muted?"打开声音":"关闭声音");
+      muteMusic(muted);
       speechSynthesis?.cancel();
     });
     const stars=$("stars");
