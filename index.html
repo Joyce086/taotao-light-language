@@ -381,9 +381,50 @@
     .letter-pinyin { right:15px; background:linear-gradient(145deg,#aa94d8,#7e6db8); transform:rotate(8deg); }
     .peach-mascot {
       position:absolute; bottom:2px; left:50%; z-index:4; width:118px; height:151px;
+      padding:0; border:0; background:transparent; color:inherit; cursor:pointer;
       transform:translateX(-50%); animation:peachBob 2.5s ease-in-out infinite;
     }
+    .peach-mascot:focus-visible {
+      outline:3px solid rgba(255,240,168,.9); outline-offset:7px; border-radius:45%;
+    }
     @keyframes peachBob { 50% { transform:translateX(-50%) translateY(-4px); } }
+    .tiga-image {
+      position:absolute; left:50%; bottom:0; z-index:5; width:116px; height:174px;
+      object-fit:contain; opacity:0; filter:drop-shadow(0 12px 9px rgba(7,11,34,.28));
+      pointer-events:none; transform:translateX(-50%) scale(.42); transform-origin:50% 82%;
+    }
+    .peach-body,.peach-suit {
+      transition:opacity .22s ease,transform .45s cubic-bezier(.2,.9,.2,1);
+    }
+    .peach-mascot.is-tiga { animation:tigaArrive .72s cubic-bezier(.2,.9,.2,1) both; }
+    .peach-mascot.is-tiga::before {
+      content:""; position:absolute; left:50%; bottom:-7px; z-index:0; width:166px; height:166px;
+      border:2px solid rgba(250,231,160,.62); border-radius:50%;
+      box-shadow:0 0 26px rgba(251,220,121,.26),inset 0 0 28px rgba(108,102,194,.15);
+      transform:translateX(-50%); animation:tigaAura 1.4s ease-out both;
+    }
+    .peach-mascot.is-tiga .tiga-image {
+      opacity:1; animation:tigaReveal .72s cubic-bezier(.2,.9,.2,1) both;
+    }
+    .peach-mascot.is-tiga .peach-body,.peach-mascot.is-tiga .peach-suit {
+      opacity:0; transform:scale(.42);
+    }
+    .is-tiga-stage .letter-friend { filter:saturate(.82); }
+    @keyframes tigaArrive {
+      0% { transform:translateX(-50%) scale(.76); filter:brightness(2.4); }
+      55% { transform:translateX(-50%) scale(1.08); filter:brightness(1.45); }
+      100% { transform:translateX(-50%) scale(1); filter:brightness(1); }
+    }
+    @keyframes tigaReveal {
+      0% { opacity:0; transform:translateX(-50%) scale(.35); }
+      58% { opacity:1; transform:translateX(-50%) scale(1.07); }
+      100% { opacity:1; transform:translateX(-50%) scale(1); }
+    }
+    @keyframes tigaAura {
+      0% { opacity:0; transform:translateX(-50%) scale(.25); }
+      45% { opacity:1; }
+      100% { opacity:.3; transform:translateX(-50%) scale(1.18); }
+    }
     .peach-body {
       position:absolute; top:19px; left:13px; z-index:3; width:92px; height:86px;
       border:3px solid #faf9f4; border-radius:49% 49% 44% 44% / 55% 55% 45% 45%;
@@ -491,10 +532,11 @@
       <div class="home-cloud two" aria-hidden="true"></div>
       <div class="home-sparkles" aria-hidden="true"><span>★</span><span>✦</span><span>●</span><span>★</span></div>
       <div class="pill cute-pill">⚡ 桃桃的光之英雄任务</div>
-      <div class="mascot-stage" aria-hidden="true">
-        <div class="speech-bubble">桃桃，变身出发！<i></i></div>
+      <div class="mascot-stage" id="heroStage">
+        <div class="speech-bubble"><span id="heroSpeech">点点英雄，光之变身！</span><i></i></div>
         <div class="letter-friend letter-a"><b>A</b><span>•ᴗ•</span></div>
-        <div class="peach-mascot">
+        <button class="peach-mascot" id="heroMorph" type="button" aria-label="点击变成迪迦形态" aria-pressed="false">
+          <img class="tiga-image" src="./tiga-multitype-v2.png" alt="" aria-hidden="true">
           <div class="peach-body">
             <span class="peach-eye left"></span><span class="peach-eye right"></span>
             <span class="peach-smile"></span>
@@ -502,7 +544,7 @@
           <div class="peach-suit">
             <span class="peach-arm left"></span><span class="peach-arm right"></span><b></b>
           </div>
-        </div>
+        </button>
         <div class="letter-friend letter-pinyin"><b>a</b><span>•ᴗ•</span></div>
       </div>
       <p class="kicker cute-kicker">字母能量正在召唤你</p>
@@ -593,7 +635,7 @@
         ]
       }
     ];
-    let index = 0, energy = 0, muted = false, locked = false;
+    let index = 0, energy = 0, muted = false, locked = false, heroTransformed = false;
     const $ = id => document.getElementById(id);
     const show = id => {
       document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active",s.id===id));
@@ -688,6 +730,18 @@
       });
     }
     function begin() { index=0;energy=0;show("mission");render();speak("桃桃准备好了吗 光之变身 一起出发吧","gentle"); }
+    function transformHero() {
+      if(heroTransformed) return;
+      heroTransformed=true;
+      $("heroMorph").classList.add("is-tiga");
+      $("heroMorph").setAttribute("aria-pressed","true");
+      $("heroMorph").setAttribute("aria-label","迪迦形态已出现");
+      $("heroStage").classList.add("is-tiga-stage");
+      $("heroSpeech").textContent="迪迦登场！";
+      successChime();
+      setTimeout(()=>speak("迪迦登场，光之变身完成啦。","gentle"),220);
+    }
+    $("heroMorph").addEventListener("click",transformHero);
     $("start").addEventListener("click",begin);
     $("again").addEventListener("click",begin);
     $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
