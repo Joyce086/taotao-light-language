@@ -262,6 +262,79 @@
       background:var(--green); color:#0a3c38; font-size:11px; font-weight:900; cursor:pointer;
     }
     #result { justify-content:center; text-align:center; }
+    .ultra-celebration {
+      position:fixed; inset:0; z-index:60; overflow:hidden; display:grid; place-items:center;
+      background:radial-gradient(circle at 50% 40%,rgba(61,114,207,.62),transparent 34%),
+                 radial-gradient(circle at 50% 50%,#172257 0,#080b26 68%,#03040f 100%);
+      opacity:0; visibility:hidden; pointer-events:none;
+    }
+    #result.active .ultra-celebration { animation:ultraOverlay 3.9s ease forwards; }
+    .ultra-flash {
+      position:absolute; inset:0;
+      background:radial-gradient(circle at 50% 44%,rgba(255,255,255,.98),rgba(111,224,255,.42) 22%,transparent 53%);
+    }
+    #result.active .ultra-flash { animation:ultraFlashPop 1.18s ease-out both; }
+    .ultra-victory-ring {
+      position:absolute; top:50%; left:50%; width:min(76vmin,520px); aspect-ratio:1;
+      border:3px solid rgba(255,231,151,.86); border-radius:50%;
+      box-shadow:0 0 42px rgba(255,222,110,.52),inset 0 0 52px rgba(103,132,255,.28);
+    }
+    #result.active .ultra-victory-ring { animation:ultraRingExpand 1.7s .15s ease-out both; }
+    .ultra-celebration-hero {
+      position:absolute; bottom:7%; left:50%; z-index:4; width:min(43vw,220px); height:min(68vh,510px);
+      object-fit:contain; filter:drop-shadow(0 0 15px rgba(120,231,255,.92)) drop-shadow(0 0 34px rgba(103,123,255,.65));
+    }
+    #result.active .ultra-celebration-hero { animation:ultraHeroArrive 2.6s .12s cubic-bezier(.18,.86,.2,1) both; }
+    .ultra-light-beam {
+      position:absolute; top:44%; left:48%; z-index:3; width:min(82vw,620px); height:18px; border-radius:999px;
+      background:linear-gradient(90deg,#fff,#79e6ff 25%,#ad94ff 58%,#ffe78b 82%,transparent);
+      box-shadow:0 0 15px #fff,0 0 32px #72dfff; transform-origin:left center;
+    }
+    #result.active .ultra-light-beam { animation:ultraBeamSweep 1.45s .78s ease-out both; }
+    .ultra-sparks { position:absolute; inset:0; z-index:5; }
+    .ultra-sparks span {
+      position:absolute; color:#fff1a6; font-size:clamp(19px,5vw,34px); text-shadow:0 0 14px currentColor;
+    }
+    #result.active .ultra-sparks span { animation:ultraSparkBurst 1.65s .7s ease-out both; }
+    .ultra-sparks span:nth-child(1) { top:18%; left:14%; }
+    .ultra-sparks span:nth-child(2) { top:28%; right:12%; color:#8eefff; animation-delay:.86s!important; }
+    .ultra-sparks span:nth-child(3) { top:52%; left:9%; color:#a99dff; animation-delay:.98s!important; }
+    .ultra-sparks span:nth-child(4) { top:60%; right:11%; animation-delay:1.08s!important; }
+    .ultra-sparks span:nth-child(5) { top:10%; right:31%; color:#8eefff; animation-delay:1.16s!important; }
+    .ultra-sparks span:nth-child(6) { top:73%; left:24%; color:#ff9dbd; animation-delay:1.24s!important; }
+    .ultra-celebration > strong {
+      position:absolute; bottom:8%; left:50%; z-index:6; color:#fff7d2; font-size:clamp(28px,8vw,48px);
+      letter-spacing:.06em; text-shadow:0 2px 0 #544a92,0 0 16px rgba(255,234,158,.92); white-space:nowrap;
+    }
+    #result.active .ultra-celebration > strong { animation:ultraTitlePop 2.25s .46s both; }
+    @keyframes ultraOverlay { 0%,77% { opacity:1; visibility:visible; } 100% { opacity:0; visibility:hidden; } }
+    @keyframes ultraFlashPop { 0% { opacity:0; transform:scale(.25); } 30% { opacity:1; } 100% { opacity:.12; transform:scale(1.35); } }
+    @keyframes ultraRingExpand {
+      0% { opacity:0; transform:translate(-50%,-50%) scale(.12); }
+      38% { opacity:1; }
+      100% { opacity:.32; transform:translate(-50%,-50%) scale(1.26); }
+    }
+    @keyframes ultraHeroArrive {
+      0% { opacity:0; transform:translate(-50%,22%) scale(.18); filter:brightness(3); }
+      42% { opacity:1; transform:translate(-50%,0) scale(1.08); filter:brightness(1.8); }
+      65%,100% { opacity:1; transform:translate(-50%,0) scale(1); }
+    }
+    @keyframes ultraBeamSweep {
+      0% { opacity:0; transform:rotate(-9deg) scaleX(0); }
+      24% { opacity:1; }
+      74% { opacity:.96; transform:rotate(-9deg) scaleX(1); }
+      100% { opacity:0; transform:rotate(-9deg) scaleX(1.1); }
+    }
+    @keyframes ultraSparkBurst {
+      0% { opacity:0; transform:translateY(26px) scale(.2) rotate(-30deg); }
+      45% { opacity:1; transform:translateY(-5px) scale(1.35) rotate(12deg); }
+      100% { opacity:0; transform:translateY(-42px) scale(.72) rotate(45deg); }
+    }
+    @keyframes ultraTitlePop {
+      0% { opacity:0; transform:translate(-50%,28px) scale(.5); }
+      34%,78% { opacity:1; transform:translate(-50%,0) scale(1); }
+      100% { opacity:0; transform:translate(-50%,-8px) scale(1.04); }
+    }
     .badge-wrap { width:200px; height:200px; position:relative; margin:20px 0 16px; display:grid; place-items:center; }
     .rays {
       position:absolute; inset:8px; border-radius:50%;
@@ -608,6 +681,17 @@
     </section>
 
     <section class="screen result" id="result">
+      <div class="ultra-celebration" aria-hidden="true">
+        <div class="ultra-flash"></div>
+        <div class="ultra-victory-ring"></div>
+        <div class="ultra-light-beam"></div>
+        <img class="ultra-celebration-hero" src="./tiga-multitype-v2.png" alt="">
+        <div class="ultra-sparks">
+          <span>★</span><span>✦</span><span>●</span>
+          <span>★</span><span>✦</span><span>●</span>
+        </div>
+        <strong>全部答对啦！</strong>
+      </div>
       <div class="pill">任务完成 · 100 光能量</div>
       <div class="badge-wrap"><div class="rays"></div><div class="badge"><span>🍑</span><b>桃桃</b><small>光之语言小战士</small></div></div>
       <h2>桃桃发现了<br><span>字母的双重身份！</span></h2>
@@ -750,7 +834,7 @@
       $("next").addEventListener("click",()=>{
         if(index===missions.length-1){
           show("result"); successChime();
-          setTimeout(()=>speak("桃桃真棒，闯关成功啦。","gentle"),360);
+          setTimeout(()=>speak("全部答题完成，迪迦来为桃桃庆祝啦。","gentle"),520);
         }
         else {index++;render();}
       });
