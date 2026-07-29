@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta name="theme-color" content="#090a24">
+  <meta name="theme-color" content="#75d4f6">
   <meta name="description" content="为桃桃设计的英文与拼音启蒙小游戏">
   <title>桃桃的光之语言任务</title>
   <style>
@@ -288,32 +288,189 @@
       .answer { min-height:116px; }
       .emoji { font-size:26px; }
     }
+    .app.home-mode {
+      color:#263459;
+      background:
+        radial-gradient(circle at 84% 14%,rgba(255,255,255,.82) 0 4%,transparent 4.4%),
+        linear-gradient(180deg,#75d4f6 0%,#c9f2ff 58%,#fff3c7 100%);
+    }
+    .app.home-mode::before {
+      opacity:.38;
+      background-image:
+        radial-gradient(circle,rgba(255,255,255,.72) 0 2px,transparent 2.5px),
+        radial-gradient(circle,rgba(255,255,255,.5) 0 1px,transparent 1.5px);
+      background-position:0 0,24px 24px; background-size:48px 48px;
+      mask-image:linear-gradient(to bottom,black,transparent 64%);
+    }
+    .home-mode .glow { opacity:.18; filter:blur(75px); }
+    .home-mode .glow.one { background:#fff7b5; }
+    .home-mode .glow.two { background:#ff98be; }
+    .home-mode .sound {
+      border:2px solid rgba(255,255,255,.78); background:rgba(255,255,255,.66);
+      color:#40517a; box-shadow:0 7px 18px rgba(62,125,162,.13);
+    }
+    .cute-home {
+      position:relative; z-index:1; justify-content:center;
+      padding-top:max(22px,env(safe-area-inset-top));
+      padding-bottom:max(18px,env(safe-area-inset-bottom));
+    }
+    .home-cloud {
+      position:absolute; z-index:-1; width:95px; height:32px; border-radius:999px;
+      background:rgba(255,255,255,.78); filter:drop-shadow(0 8px 14px rgba(73,139,171,.08));
+      animation:cloudFloat 5s ease-in-out infinite;
+    }
+    .home-cloud::before,.home-cloud::after {
+      content:""; position:absolute; bottom:7px; border-radius:50%; background:inherit;
+    }
+    .home-cloud::before { left:16px; width:41px; height:41px; }
+    .home-cloud::after { right:14px; width:31px; height:31px; }
+    .home-cloud.one { top:13%; left:-30px; }
+    .home-cloud.two { top:25%; right:-37px; width:112px; transform:scale(.84); animation-delay:-2.2s; }
+    @keyframes cloudFloat { 50% { translate:9px 3px; } }
+    .home-sparkles span {
+      position:absolute; color:#fff7a8; font-size:17px;
+      text-shadow:0 2px 8px rgba(239,156,58,.24); animation:sparkleBob 2.4s ease-in-out infinite;
+    }
+    .home-sparkles span:nth-child(1) { top:18%; left:12%; }
+    .home-sparkles span:nth-child(2) { top:31%; right:10%; color:#ff95b8; animation-delay:-.8s; }
+    .home-sparkles span:nth-child(3) { top:42%; left:5%; color:#8c82eb; font-size:10px; animation-delay:-1.4s; }
+    .home-sparkles span:nth-child(4) { top:54%; right:4%; animation-delay:-1.8s; }
+    @keyframes sparkleBob { 50% { transform:translateY(-5px) rotate(12deg) scale(1.18); } }
+    .cute-pill {
+      padding:8px 14px; border:3px solid rgba(255,255,255,.82); background:#fff9e8;
+      color:#884f68; box-shadow:0 8px 20px rgba(102,111,155,.12);
+      font-size:13px; letter-spacing:.03em;
+    }
+    .mascot-stage { width:min(100%,310px); height:188px; position:relative; margin:12px auto 4px; }
+    .speech-bubble {
+      position:absolute; top:0; left:50%; z-index:5; padding:9px 14px;
+      border:3px solid #fff; border-radius:18px; background:#fffdf6; color:#744f62;
+      box-shadow:0 8px 18px rgba(79,108,147,.14); font-size:12px; font-weight:800;
+      white-space:nowrap; transform:translateX(-50%) rotate(-2deg);
+    }
+    .speech-bubble i {
+      position:absolute; bottom:-10px; left:50%; width:16px; height:16px;
+      border-right:3px solid white; border-bottom:3px solid white; background:#fffdf6;
+      transform:translateX(-50%) rotate(45deg);
+    }
+    .letter-friend {
+      position:absolute; bottom:10px; z-index:3; width:66px; height:78px;
+      display:grid; place-items:center; align-content:center; border:4px solid white;
+      border-radius:25px 25px 29px 29px; box-shadow:0 11px 0 rgba(60,82,129,.09); color:white;
+    }
+    .letter-friend b { font-size:38px; line-height:.95; }
+    .letter-friend span { margin-top:5px; font-size:11px; font-weight:900; letter-spacing:.09em; }
+    .letter-a { left:15px; background:linear-gradient(145deg,#53bdf6,#5e87ee); transform:rotate(-8deg); }
+    .letter-pinyin { right:15px; background:linear-gradient(145deg,#b991f4,#8d70e7); transform:rotate(8deg); }
+    .peach-mascot {
+      position:absolute; bottom:2px; left:50%; z-index:4; width:125px; height:137px;
+      transform:translateX(-50%); animation:peachBob 2.5s ease-in-out infinite;
+    }
+    @keyframes peachBob { 50% { transform:translateX(-50%) translateY(-4px) rotate(1deg); } }
+    .peach-cape {
+      position:absolute; right:0; bottom:9px; width:87px; height:88px; border:3px solid white;
+      border-radius:18% 66% 46% 52%; background:#6b79df; transform:rotate(12deg);
+    }
+    .peach-body {
+      position:absolute; bottom:12px; left:3px; z-index:2; width:106px; height:101px;
+      border:4px solid white; border-radius:52% 48% 50% 50% / 45% 46% 58% 58%;
+      background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.72) 0 7%,transparent 7.8%),
+                 linear-gradient(145deg,#ffb386,#ff7e9e 74%);
+      box-shadow:0 12px 0 rgba(77,88,138,.1);
+    }
+    .peach-leaf { position:absolute; top:12px; z-index:3; width:43px; height:23px; border:3px solid white; background:#58c98b; }
+    .peach-leaf.left { left:25px; border-radius:80% 10% 80% 12%; transform:rotate(22deg); }
+    .peach-leaf.right { left:58px; border-radius:10% 80% 12% 80%; background:#76d78e; transform:rotate(-19deg); }
+    .peach-eye,.peach-cheek { position:absolute; display:block; border-radius:50%; }
+    .peach-eye { top:39px; width:8px; height:11px; background:#593c59; }
+    .peach-eye.left,.peach-cheek.left { left:29px; }
+    .peach-eye.right,.peach-cheek.right { right:29px; }
+    .peach-cheek { top:53px; width:14px; height:7px; background:rgba(232,80,116,.35); }
+    .peach-smile {
+      position:absolute; top:51px; left:50%; width:18px; height:12px;
+      border-right:3px solid #673c59; border-bottom:3px solid #673c59;
+      border-radius:0 0 12px; transform:translateX(-50%) rotate(45deg);
+    }
+    .peach-body b {
+      position:absolute; bottom:8px; left:50%; width:31px; height:26px; display:grid;
+      place-items:center; border:2px solid rgba(255,255,255,.76); border-radius:10px;
+      background:#fff2b8; color:#d65a76; font-size:13px; transform:translateX(-50%);
+    }
+    .cute-kicker { margin:0 0 8px; color:#6d64a0; font-size:13px; letter-spacing:.05em; }
+    .cute-home h1 { color:#29365d; font-size:clamp(32px,9vw,48px); line-height:1.12; }
+    .cute-home h1 span { background:none; color:#f15f83; text-shadow:0 3px 0 rgba(255,255,255,.62); }
+    .cute-home .home-copy { margin:11px 0 15px; color:#69779a; font-size:14px; line-height:1.55; }
+    .cute-worlds { gap:11px; margin-bottom:15px; }
+    .cute-world {
+      min-height:66px; padding:10px 12px; border:3px solid rgba(255,255,255,.84);
+      border-radius:22px; box-shadow:0 9px 0 rgba(63,83,136,.08);
+    }
+    .cute-world.en { background:#e8f7ff; color:#316db5; }
+    .cute-world.py { background:#f2eaff; color:#7350aa; }
+    .cute-world .world-icon {
+      width:43px; height:43px; border-radius:15px; background:white; color:currentColor;
+      box-shadow:0 4px 10px rgba(67,93,140,.11);
+    }
+    .cute-world b { font-size:14px; }
+    .cute-world small { color:#7f88a5; font-size:10px; }
+    .cute-start {
+      min-height:65px; padding-left:24px; border:4px solid rgba(255,255,255,.78);
+      border-radius:25px; background:linear-gradient(105deg,#ffd66f,#ffac6c); color:#67414b;
+      box-shadow:0 11px 0 #ed7890,0 18px 28px rgba(156,88,115,.2);
+    }
+    .cute-start span { display:inline; margin-right:6px; color:inherit; font-size:17px; }
+    .cute-start b { display:inline; font-size:20px; }
+    .cute-start i { border-radius:50%; background:rgba(255,255,255,.48); color:#8c5261; font-size:28px; }
+    .cute-note { margin-top:17px; color:#6c7590; font-size:11px; }
+    @media(max-width:440px) {
+      .cute-home { padding-top:max(16px,env(safe-area-inset-top)); }
+      .mascot-stage { height:175px; margin-top:8px; }
+      .peach-mascot { transform:translateX(-50%) scale(.92); transform-origin:bottom center; }
+      @keyframes peachBob { 50% { transform:translateX(-50%) translateY(-3px) scale(.92) rotate(1deg); } }
+      .cute-home h1 { font-size:clamp(31px,9.3vw,41px); }
+      .cute-home .home-copy { margin:8px 0 12px; }
+      .cute-worlds { margin-bottom:12px; }
+      .cute-start { min-height:61px; }
+    }
     @media(prefers-reduced-motion:reduce) {
       *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
     }
   </style>
 </head>
 <body>
-  <main class="app">
+  <main class="app home-mode">
     <div class="glow one"></div><div class="glow two"></div>
     <div class="stars" id="stars" aria-hidden="true"></div>
     <button class="sound" id="sound" aria-label="关闭声音">🔊</button>
 
-    <section class="screen active" id="home">
-      <div class="pill">🍑 桃桃专属任务</div>
-      <div class="orbit" aria-hidden="true">
-        <i class="orbit-dot a"></i><i class="orbit-dot b"></i>
-        <div class="emblem"><span class="crown">✦</span><span class="peach">桃</span></div>
+    <section class="screen active cute-home" id="home">
+      <div class="home-cloud one" aria-hidden="true"></div>
+      <div class="home-cloud two" aria-hidden="true"></div>
+      <div class="home-sparkles" aria-hidden="true"><span>★</span><span>✦</span><span>●</span><span>★</span></div>
+      <div class="pill cute-pill">🍑 桃桃的小游戏</div>
+      <div class="mascot-stage" aria-hidden="true">
+        <div class="speech-bubble">桃桃，我们出发吧！<i></i></div>
+        <div class="letter-friend letter-a"><b>A</b><span>•ᴗ•</span></div>
+        <div class="peach-mascot">
+          <div class="peach-leaf left"></div><div class="peach-leaf right"></div>
+          <div class="peach-cape"></div>
+          <div class="peach-body">
+            <span class="peach-eye left"></span><span class="peach-eye right"></span>
+            <span class="peach-cheek left"></span><span class="peach-cheek right"></span>
+            <span class="peach-smile"></span><b>桃</b>
+          </div>
+        </div>
+        <div class="letter-friend letter-pinyin"><b>a</b><span>•ᴗ•</span></div>
       </div>
-      <p class="kicker">光之语言任务 · 试玩版</p>
-      <h1>英文和拼音<br><span>都有自己的超能力</span></h1>
-      <p class="home-copy">帮字母找到正确的语言世界，<br>收集 100 点光能量！</p>
-      <div class="worlds">
-        <div class="world en"><span class="world-icon">A</span><span><b>英文能量</b><small>A → Apple 🍎</small></span></div>
-        <div class="world py"><span class="world-icon">a</span><span><b>拼音能量</b><small>a → 阿姨 👩</small></span></div>
+      <p class="kicker cute-kicker">今天的字母宝宝在等你</p>
+      <h1>帮字母宝宝<br><span>找到自己的家！</span></h1>
+      <p class="home-copy">蓝色是英文小屋，紫色是拼音小屋</p>
+      <div class="worlds cute-worlds">
+        <div class="world en cute-world"><span class="world-icon">A</span><span><b>英文小屋</b><small>Apple 🍎</small></span></div>
+        <div class="world py cute-world"><span class="world-icon">a</span><span><b>拼音小屋</b><small>阿姨 👩</small></span></div>
       </div>
-      <button class="primary" id="start"><span>启动变身</span><b>开始任务</b><i>→</i></button>
-      <p class="note">适合每次玩 3–5 分钟</p>
+      <button class="primary cute-start" id="start"><span>⭐</span><b>一起去闯关</b><i>›</i></button>
+      <p class="note cute-note">每次玩一小会儿 · 轻松学会不混淆</p>
     </section>
 
     <section class="screen" id="mission">
@@ -397,14 +554,43 @@
     const $ = id => document.getElementById(id);
     const show = id => {
       document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active",s.id===id));
+      document.querySelector(".app").classList.toggle("home-mode",id==="home");
       window.scrollTo(0,0);
     };
-    function speak(text) {
+    function friendlyChineseVoice() {
+      if (!("speechSynthesis" in window)) return;
+      const voices=speechSynthesis.getVoices();
+      const preferred=/ting|yu-shu|meijia|mei-jia|sinji|sin-ji|xiaoxiao|xiaoyi|xiaohan|xiaomeng|婷婷|晓晓|小艺/i;
+      return voices.find(v=>v.lang.toLowerCase().startsWith("zh")&&preferred.test(v.name))
+        || voices.find(v=>v.lang.toLowerCase()==="zh-cn")
+        || voices.find(v=>v.lang.toLowerCase().startsWith("zh"));
+    }
+    function speak(text,mood="guide") {
       if (muted || !("speechSynthesis" in window)) return;
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang="zh-CN"; u.rate=.82; u.pitch=1.08;
+      u.lang="zh-CN";
+      const voice=friendlyChineseVoice();
+      if(voice) u.voice=voice;
+      u.rate=mood==="celebrate"?.96:mood==="gentle"?.84:.88;
+      u.pitch=mood==="celebrate"?1.28:mood==="gentle"?1.16:1.12;
       speechSynthesis.speak(u);
+    }
+    function successChime() {
+      if(muted) return;
+      const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+      if(!AudioContextClass) return;
+      const audio=new AudioContextClass(), gain=audio.createGain();
+      gain.gain.setValueAtTime(.0001,audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.12,audio.currentTime+.02);
+      gain.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+.62);
+      gain.connect(audio.destination);
+      [523.25,659.25,783.99].forEach((frequency,i)=>{
+        const tone=audio.createOscillator();
+        tone.type="sine"; tone.frequency.value=frequency; tone.connect(gain);
+        tone.start(audio.currentTime+i*.12); tone.stop(audio.currentTime+.32+i*.12);
+      });
+      setTimeout(()=>audio.close(),750);
     }
     function render() {
       const m = missions[index];
@@ -433,7 +619,7 @@
         btn.classList.add("retry");
         $("feedback").className="feedback retry-msg";
         $("feedback").innerHTML="<p>🌟 差一点点，换一扇门试试</p>";
-        speak("差一点点。看看是哪一个语言世界，再试一次。");
+        speak("没关系，我们再找一找。","gentle");
         setTimeout(()=>{btn.classList.remove("retry");$("feedback").className="feedback";$("feedback").innerHTML="<p>💡 看颜色也能找到线索</p>";},900);
         return;
       }
@@ -441,13 +627,17 @@
       $("energyNumber").textContent=energy; $("energyBar").style.width=energy+"%";
       $("feedback").className="feedback good";
       $("feedback").innerHTML=`<p>✨ <b>光能量 +25</b> ${m.helper}</p><button class="next" id="next">${index===missions.length-1?"领取徽章":"下一项任务"} →</button>`;
-      speak("答对啦！"+m.helper);
+      successChime();
+      setTimeout(()=>speak("哇，答对啦！桃桃真棒！","celebrate"),220);
       $("next").addEventListener("click",()=>{
-        if(index===missions.length-1){show("result");speak("任务完成！桃桃获得光之语言小战士徽章！");}
+        if(index===missions.length-1){
+          show("result"); successChime();
+          setTimeout(()=>speak("太棒啦！桃桃闯关成功，获得小战士徽章！","celebrate"),220);
+        }
         else {index++;render();}
       });
     }
-    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，光之语言任务启动！"); }
+    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，我们去帮字母宝宝找家吧！","celebrate"); }
     $("start").addEventListener("click",begin);
     $("again").addEventListener("click",begin);
     $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
