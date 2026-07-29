@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="theme-color" content="#090a24">
+  <meta name="description" content="为桃桃设计的英文与拼音启蒙小游戏">
+  <title>桃桃的光之语言任务</title>
+  <style>
+    :root {
+      --ink: #f7f5ff;
+      --muted: #aab3d8;
+      --cyan: #65e8ff;
+      --violet: #a77aff;
+      --gold: #ffd76a;
+      --green: #61e4c3;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #050617; }
+    body {
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    button { font: inherit; -webkit-tap-highlight-color: transparent; }
+    .app {
+      min-height: 100dvh;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(71,104,255,.25), transparent 40%),
+        linear-gradient(180deg,#0c0c30 0%,#07081f 55%,#050617 100%);
+    }
+    .app::before {
+      content: "";
+      position: fixed; inset: 0; z-index: -4;
+      opacity: .52;
+      background-image:
+        linear-gradient(rgba(119,132,224,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(119,132,224,.035) 1px,transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom,transparent,black 24%,black 74%,transparent);
+    }
+    .glow {
+      position: fixed; z-index: -3; width: 370px; height: 370px;
+      border-radius: 50%; filter: blur(65px); opacity: .14; pointer-events: none;
+    }
+    .glow.one { left: -170px; top: 8%; background: #2bbfff; }
+    .glow.two { right: -190px; bottom: 5%; background: #8d5bff; }
+    .stars { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+    .stars i {
+      position: absolute; display: block; border-radius: 50%; background: white;
+      box-shadow: 0 0 10px rgba(132,228,255,.85);
+      animation: twinkle 3.2s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity:.2; transform:scale(.7); }
+      50% { opacity:.95; transform:scale(1.45); }
+    }
+    .screen {
+      width: min(100%,720px); min-height: 100dvh; margin: 0 auto;
+      padding: max(28px,env(safe-area-inset-top)) 22px max(25px,env(safe-area-inset-bottom));
+      display: none; flex-direction: column; align-items: center;
+    }
+    .screen.active { display: flex; animation: screenIn .48s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes screenIn { from { opacity:0; transform:translateY(12px); } }
+    .sound {
+      position: fixed; top: max(18px,env(safe-area-inset-top)); right: max(18px,env(safe-area-inset-right));
+      z-index: 20; width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 15px; background: rgba(14,17,46,.68); color: white;
+      font-size: 20px; backdrop-filter: blur(14px); cursor: pointer;
+    }
+    .pill {
+      display: inline-flex; align-items:center; gap:8px; padding:7px 12px;
+      border:1px solid rgba(255,255,255,.11); border-radius:999px;
+      background:rgba(255,255,255,.06); color:#cad1ef; font-size:12px;
+      font-weight:700; letter-spacing:.08em;
+    }
+    #home { justify-content:center; text-align:center; }
+    .orbit {
+      width:172px; height:172px; position:relative; margin:26px 0 21px;
+      display:grid; place-items:center; border:1px solid rgba(122,216,255,.19);
+      border-radius:50%;
+    }
+    .orbit::before,.orbit::after {
+      content:""; position:absolute; inset:14px; border:1px solid rgba(157,128,255,.16);
+      border-radius:50%; transform:rotate(35deg);
+    }
+    .orbit::after { inset:32px -7px; border-color:rgba(255,213,106,.15); transform:rotate(-25deg); }
+    .orbit-dot {
+      position:absolute; width:11px; height:11px; border-radius:50%;
+      box-shadow:0 0 18px currentColor; animation:pulse 2.1s ease-in-out infinite;
+    }
+    .orbit-dot.a { top:9px; right:38px; color:var(--cyan); background:currentColor; }
+    .orbit-dot.b { bottom:17px; left:26px; color:var(--violet); background:currentColor; animation-delay:.8s; }
+    @keyframes pulse { 50% { transform:scale(1.45); opacity:.65; } }
+    .emblem {
+      width:102px; height:118px; position:relative; display:grid; place-items:center;
+      border:2px solid rgba(158,234,255,.78); border-radius:48% 48% 43% 43%;
+      background:linear-gradient(155deg,rgba(101,232,255,.4),transparent 34%),
+                 linear-gradient(25deg,#4734b6,#161d58 58%,#263f8b);
+      box-shadow:inset 0 0 25px rgba(101,232,255,.2),0 0 42px rgba(56,157,255,.25);
+    }
+    .emblem::before,.emblem::after {
+      content:""; position:absolute; top:39px; width:31px; height:17px; background:var(--cyan);
+      clip-path:polygon(0 0,100% 25%,72% 100%,0 55%); filter:drop-shadow(0 0 9px var(--cyan));
+    }
+    .emblem::before { left:10px; }
+    .emblem::after { right:10px; transform:scaleX(-1); }
+    .crown { position:absolute; top:9px; color:var(--gold); text-shadow:0 0 12px var(--gold); }
+    .peach {
+      position:relative; top:24px; width:43px; height:43px; display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.7); border-radius:50%;
+      background:linear-gradient(145deg,#ffb199,#ff719b); color:#411838;
+      font-size:23px; font-weight:900; box-shadow:0 0 23px rgba(255,126,170,.55);
+    }
+    .kicker { margin:0 0 10px; color:var(--cyan); font-size:12px; font-weight:800; letter-spacing:.17em; }
+    h1 { margin:0; font-size:clamp(34px,10vw,54px); line-height:1.12; letter-spacing:-.045em; }
+    h1 span,.result h2 span {
+      background:linear-gradient(90deg,#9cecff 5%,#bda3ff 52%,#ffe09a);
+      background-clip:text; color:transparent;
+    }
+    .home-copy { margin:16px 0 22px; color:var(--muted); font-size:15px; line-height:1.75; }
+    .worlds {
+      width:min(100%,490px); display:grid; grid-template-columns:repeat(2,1fr);
+      gap:10px; margin-bottom:20px;
+    }
+    .world {
+      min-width:0; padding:12px; display:flex; align-items:center; gap:10px;
+      border:1px solid; border-radius:18px; text-align:left;
+    }
+    .world.en { border-color:rgba(101,232,255,.25); background:linear-gradient(145deg,rgba(38,103,190,.24),rgba(14,28,70,.42)); }
+    .world.py { border-color:rgba(172,127,255,.25); background:linear-gradient(145deg,rgba(107,77,255,.22),rgba(38,23,89,.42)); }
+    .world-icon {
+      flex:0 0 auto; width:39px; height:39px; display:grid; place-items:center;
+      border-radius:13px; background:rgba(255,255,255,.09); font-size:21px; font-weight:900;
+    }
+    .world b,.world small { display:block; }
+    .world b { margin-bottom:3px; font-size:13px; }
+    .world small { color:#99a5cc; font-size:10px; white-space:nowrap; }
+    .primary {
+      width:min(100%,490px); min-height:66px; position:relative; padding:10px 70px 10px 24px;
+      border:0; border-radius:21px; background:linear-gradient(105deg,#2b83f5,#6256f8 55%,#965eea);
+      color:white; text-align:left; box-shadow:0 16px 42px rgba(68,89,236,.27),inset 0 1px rgba(255,255,255,.35);
+      cursor:pointer; transition:transform .18s ease;
+    }
+    .primary:active { transform:scale(.98); }
+    .primary span,.primary b { display:block; }
+    .primary span { margin-bottom:1px; color:rgba(255,255,255,.74); font-size:10px; letter-spacing:.07em; }
+    .primary b { font-size:18px; }
+    .primary i {
+      position:absolute; top:50%; right:19px; width:38px; height:38px; display:grid; place-items:center;
+      border-radius:13px; background:rgba(255,255,255,.16); font-size:21px; font-style:normal;
+      transform:translateY(-50%);
+    }
+    .note { margin:13px 0 0; color:#747fa8; font-size:11px; }
+    #mission { padding-top:max(20px,env(safe-area-inset-top)); }
+    .mission-head {
+      width:100%; display:grid; grid-template-columns:44px 1fr 44px; align-items:center;
+      gap:12px; padding-right:54px;
+    }
+    .back {
+      width:44px; height:44px; border:1px solid rgba(255,255,255,.1); border-radius:14px;
+      background:rgba(255,255,255,.05); color:white; font-size:32px; cursor:pointer;
+    }
+    .energy-label { display:flex; justify-content:space-between; margin-bottom:6px; color:#b9c3e5; font-size:11px; }
+    .energy-label b { color:var(--gold); font-size:13px; }
+    .track { height:8px; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:999px; background:rgba(255,255,255,.06); }
+    .track span {
+      display:block; width:0; height:100%; border-radius:inherit;
+      background:linear-gradient(90deg,#48d5ff,#806cff,#ffcf67); box-shadow:0 0 12px #75cbff;
+      transition:width .65s cubic-bezier(.2,.8,.2,1);
+    }
+    .count { color:#8490b6; font-size:12px; font-weight:800; }
+    .mentor {
+      width:100%; margin:20px 0 12px; padding:11px 12px; display:flex; align-items:center; gap:11px;
+      border:1px solid rgba(95,209,255,.14); border-radius:17px; background:rgba(20,31,76,.48);
+    }
+    .mentor-face {
+      flex:0 0 auto; width:37px; height:37px; display:grid; place-items:center;
+      border:1px solid rgba(118,229,255,.5); border-radius:50% 50% 43% 43%;
+      background:linear-gradient(145deg,#3456b0,#20245d); color:var(--cyan);
+    }
+    .mentor p { min-width:0; flex:1; margin:0; }
+    .mentor b,.mentor span { display:block; }
+    .mentor b { margin-bottom:2px; font-size:12px; }
+    .mentor span { color:#8f9ac1; font-size:10px; }
+    .mentor button {
+      width:35px; height:35px; border:0; border-radius:11px;
+      background:rgba(255,255,255,.07); cursor:pointer;
+    }
+    .mission-card {
+      width:100%; padding:22px 18px 19px; border:1px solid rgba(255,255,255,.1);
+      border-radius:28px; background:linear-gradient(145deg,rgba(31,34,87,.83),rgba(12,14,44,.88));
+      box-shadow:inset 0 1px rgba(255,255,255,.08),0 24px 65px rgba(0,0,0,.2);
+      backdrop-filter:blur(18px);
+    }
+    .eyebrow { margin:0 0 17px; color:var(--cyan); font-size:10px; font-weight:800; letter-spacing:.12em; text-align:center; }
+    .core {
+      width:126px; height:126px; position:relative; margin:0 auto 18px; display:grid; place-items:center;
+      border:1px solid rgba(102,225,255,.32); border-radius:50%;
+      background:radial-gradient(circle at 40% 35%,rgba(139,239,255,.3),transparent 34%),
+                 radial-gradient(circle,rgba(61,91,224,.45),rgba(21,24,72,.9) 70%);
+      box-shadow:inset 0 0 34px rgba(115,217,255,.16),0 0 44px rgba(73,108,255,.19);
+    }
+    .core strong { z-index:2; font-size:clamp(32px,10vw,53px); line-height:1; letter-spacing:-.06em; }
+    .core::before {
+      content:""; position:absolute; inset:10px; border:1px dashed rgba(163,143,255,.3);
+      border-radius:50%; animation:spin 12s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .mission-card h2 {
+      min-height:54px; margin:0 0 17px; font-size:clamp(19px,5.5vw,26px);
+      line-height:1.4; letter-spacing:-.02em; text-align:center;
+    }
+    .answers { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .answers.three { grid-template-columns:repeat(3,1fr); }
+    .answer {
+      min-width:0; min-height:132px; position:relative; padding:14px 9px 12px;
+      border:1px solid rgba(255,255,255,.11); border-radius:20px;
+      background:rgba(255,255,255,.045); color:var(--ink); text-align:center; cursor:pointer;
+      transition:transform .16s ease,border-color .16s ease,background .16s ease;
+    }
+    .answer.en { background:linear-gradient(145deg,rgba(41,125,227,.19),rgba(21,37,90,.35)); }
+    .answer.py { background:linear-gradient(145deg,rgba(120,78,236,.19),rgba(54,30,100,.35)); }
+    .answer:active { transform:scale(.97); }
+    .answer.right {
+      border-color:#72efce; background:linear-gradient(145deg,rgba(42,211,166,.24),rgba(18,73,75,.35));
+      box-shadow:0 0 20px rgba(83,237,198,.16);
+    }
+    .answer.retry { animation:shake .35s ease-in-out; border-color:rgba(255,204,105,.5); }
+    @keyframes shake { 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+    .emoji { display:block; margin-bottom:7px; font-size:30px; }
+    .answer b,.answer small { display:block; overflow:hidden; text-overflow:ellipsis; }
+    .answer b { margin-bottom:3px; font-size:14px; }
+    .answer small { color:#909dc6; font-size:9px; white-space:nowrap; }
+    .feedback {
+      width:100%; min-height:76px; margin-top:12px; padding:14px 16px;
+      display:flex; align-items:center; gap:12px; border:1px solid rgba(255,255,255,.08);
+      border-radius:20px; background:rgba(255,255,255,.035); color:#929dc1;
+    }
+    .feedback p { flex:1; margin:0; font-size:11px; line-height:1.5; }
+    .feedback.good { border-color:rgba(93,231,194,.25); background:rgba(44,167,140,.09); color:#c8f7eb; }
+    .feedback.retry-msg { border-color:rgba(255,213,106,.2); color:#f3d98b; }
+    .next {
+      flex:0 0 auto; min-height:44px; padding:0 13px; border:0; border-radius:13px;
+      background:var(--green); color:#0a3c38; font-size:11px; font-weight:900; cursor:pointer;
+    }
+    #result { justify-content:center; text-align:center; }
+    .badge-wrap { width:200px; height:200px; position:relative; margin:20px 0 16px; display:grid; place-items:center; }
+    .rays {
+      position:absolute; inset:8px; border-radius:50%;
+      background:repeating-conic-gradient(from 8deg,rgba(255,215,106,.38) 0 3deg,transparent 3deg 19deg);
+      animation:slowSpin 24s linear infinite;
+    }
+    @keyframes slowSpin { to { transform:rotate(360deg); } }
+    .badge {
+      width:132px; height:152px; position:relative; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; border:2px solid #ffe69d; border-radius:50% 50% 43% 43%;
+      background:radial-gradient(circle at 36% 24%,rgba(255,255,255,.2),transparent 27%),
+                 linear-gradient(145deg,#7660ef,#1c2d79 63%,#17204d);
+      box-shadow:inset 0 0 24px rgba(119,231,255,.25),0 0 35px rgba(255,211,95,.28);
+    }
+    .badge::before { content:"✦"; position:absolute; top:10px; color:var(--gold); }
+    .badge span { margin-top:13px; font-size:36px; }
+    .badge b { margin:2px 0; font-size:20px; }
+    .badge small { color:#c7d5ff; font-size:9px; }
+    .result h2 { margin:0; font-size:clamp(29px,8vw,43px); line-height:1.2; letter-spacing:-.04em; }
+    .result > p { margin:13px 0 20px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .summary {
+      width:min(100%,490px); display:grid; grid-template-columns:1fr 24px 1fr;
+      align-items:center; gap:5px; margin-bottom:16px;
+    }
+    .summary div { padding:13px 8px; border:1px solid rgba(255,255,255,.09); border-radius:17px; background:rgba(255,255,255,.045); }
+    .summary span,.summary b,.summary small { display:block; }
+    .summary b { font-size:12px; }
+    .summary small { margin-top:2px; color:#8792b7; font-size:9px; }
+    .secondary { min-height:40px; padding:0 20px; border:0; background:transparent; color:#7f89ac; font-size:11px; cursor:pointer; }
+    @media(max-width:440px) {
+      .orbit { width:144px; height:144px; margin:15px 0 16px; }
+      .emblem { width:88px; height:102px; }
+      .emblem::before,.emblem::after { top:35px; width:27px; }
+      .peach { width:38px; height:38px; font-size:19px; }
+      .home-copy { margin:11px 0 15px; }
+      .mission-card { padding:18px 13px 14px; }
+      .core { width:104px; height:104px; margin-bottom:14px; }
+      .answer { min-height:116px; }
+      .emoji { font-size:26px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="glow one"></div><div class="glow two"></div>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <button class="sound" id="sound" aria-label="关闭声音">🔊</button>
+
+    <section class="screen active" id="home">
+      <div class="pill">🍑 桃桃专属任务</div>
+      <div class="orbit" aria-hidden="true">
+        <i class="orbit-dot a"></i><i class="orbit-dot b"></i>
+        <div class="emblem"><span class="crown">✦</span><span class="peach">桃</span></div>
+      </div>
+      <p class="kicker">光之语言任务 · 试玩版</p>
+      <h1>英文和拼音<br><span>都有自己的超能力</span></h1>
+      <p class="home-copy">帮字母找到正确的语言世界，<br>收集 100 点光能量！</p>
+      <div class="worlds">
+        <div class="world en"><span class="world-icon">A</span><span><b>英文能量</b><small>A → Apple 🍎</small></span></div>
+        <div class="world py"><span class="world-icon">a</span><span><b>拼音能量</b><small>a → 阿姨 👩</small></span></div>
+      </div>
+      <button class="primary" id="start"><span>启动变身</span><b>开始任务</b><i>→</i></button>
+      <p class="note">适合每次玩 3–5 分钟</p>
+    </section>
+
+    <section class="screen" id="mission">
+      <header class="mission-head">
+        <button class="back" id="back" aria-label="返回首页">‹</button>
+        <div>
+          <div class="energy-label"><span>⚡ 光能量</span><b id="energyNumber">0</b></div>
+          <div class="track"><span id="energyBar"></span></div>
+        </div>
+        <span class="count" id="count">1/4</span>
+      </header>
+      <div class="mentor">
+        <div class="mentor-face">✦</div>
+        <p><b id="instruction">先看蓝色的英文能量门</b><span>点一下你认为正确的答案</span></p>
+        <button id="voice" aria-label="播放题目">🔊</button>
+      </div>
+      <div class="mission-card">
+        <p class="eyebrow" id="eyebrow"></p>
+        <div class="core"><strong id="prompt"></strong></div>
+        <h2 id="question"></h2>
+        <div class="answers" id="answers"></div>
+      </div>
+      <div class="feedback" id="feedback"><p>💡 看颜色也能找到线索</p></div>
+    </section>
+
+    <section class="screen result" id="result">
+      <div class="pill">任务完成 · 100 光能量</div>
+      <div class="badge-wrap"><div class="rays"></div><div class="badge"><span>🍑</span><b>桃桃</b><small>光之语言小战士</small></div></div>
+      <h2>桃桃发现了<br><span>字母的双重身份！</span></h2>
+      <p>英文字母帮助我们认识英文单词，<br>拼音字母帮助我们读中国字。</p>
+      <div class="summary">
+        <div><span>🔵</span><b>英文世界</b><small>A → Apple</small></div>
+        <i>＋</i>
+        <div><span>🟣</span><b>拼音世界</b><small>m + a → mā</small></div>
+      </div>
+      <button class="primary" id="again"><span>再收集一次</span><b>重新挑战</b><i>↻</i></button>
+      <button class="secondary" id="resultHome">返回任务基地</button>
+    </section>
+  </main>
+  <script>
+    const missions = [
+      {
+        eyebrow:"任务 1 · 字母双身份", question:"M 在英文世界的朋友是谁？",
+        instruction:"先看蓝色的英文能量门", prompt:"M",
+        helper:"英文里，M 的名字读 em。", voice:"任务一。M 在英文世界的朋友是谁？",
+        answers:[
+          {label:"Monkey",sub:"M → Monkey",emoji:"🐒",correct:true,world:"en"},
+          {label:"妈妈",sub:"m → mā ma",emoji:"👩",correct:false,world:"py"}
+        ]
+      },
+      {
+        eyebrow:"任务 2 · 英文能量", question:"哪个英文单词从 A 开始？",
+        instruction:"找到 A 的英文朋友", prompt:"A",
+        helper:"A 是英文字母，Apple 是它的单词朋友。", voice:"任务二。哪个英文单词从 A 开始？",
+        answers:[
+          {label:"Apple",sub:"A → Apple",emoji:"🍎",correct:true,world:"en"},
+          {label:"Cat",sub:"C → Cat",emoji:"🐱",correct:false,world:"en"},
+          {label:"Banana",sub:"B → Banana",emoji:"🍌",correct:false,world:"en"}
+        ]
+      },
+      {
+        eyebrow:"任务 3 · 拼音合体", question:"m 和 a 合体，会变成什么？",
+        instruction:"启动紫色拼音能量", prompt:"m + a",
+        helper:"拼音里，m 和 a 可以合成 ma；加上一声就是 mā。", voice:"任务三。拼音合体。m 和 a 合起来是什么？",
+        answers:[
+          {label:"mā",sub:"m + a → mā 妈",emoji:"👩",correct:true,world:"py"},
+          {label:"M",sub:"英文字母 M",emoji:"🔤",correct:false,world:"en"}
+        ]
+      },
+      {
+        eyebrow:"任务 4 · 光之判断", question:"看到“阿姨”的拼音 a，要走哪扇门？",
+        instruction:"想一想：它在帮汉字发音", prompt:"a → 阿姨",
+        helper:"拼音 a 帮助我们读汉字；英文 A 可以组成 Apple。", voice:"最终任务。看到阿姨的拼音 a，要走哪一扇门？",
+        answers:[
+          {label:"英文能量门",sub:"A → Apple",emoji:"🔵",correct:false,world:"en"},
+          {label:"拼音能量门",sub:"a → 阿姨",emoji:"🟣",correct:true,world:"py"}
+        ]
+      }
+    ];
+    let index = 0, energy = 0, muted = false, locked = false;
+    const $ = id => document.getElementById(id);
+    const show = id => {
+      document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active",s.id===id));
+      window.scrollTo(0,0);
+    };
+    function speak(text) {
+      if (muted || !("speechSynthesis" in window)) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang="zh-CN"; u.rate=.82; u.pitch=1.08;
+      speechSynthesis.speak(u);
+    }
+    function render() {
+      const m = missions[index];
+      locked = false;
+      $("count").textContent = `${index+1}/${missions.length}`;
+      $("energyNumber").textContent = energy;
+      $("energyBar").style.width = energy+"%";
+      $("instruction").textContent = m.instruction;
+      $("eyebrow").textContent = m.eyebrow;
+      $("prompt").textContent = m.prompt;
+      $("question").textContent = m.question;
+      $("answers").className = "answers"+(m.answers.length===3?" three":"");
+      $("answers").innerHTML = m.answers.map((a,i)=>`
+        <button class="answer ${a.world}" data-index="${i}">
+          <span class="emoji">${a.emoji}</span><b>${a.label}</b><small>${a.sub}</small>
+        </button>`).join("");
+      $("feedback").className="feedback";
+      $("feedback").innerHTML="<p>💡 看颜色也能找到线索</p>";
+      $("answers").querySelectorAll(".answer").forEach(btn=>btn.addEventListener("click",()=>choose(Number(btn.dataset.index),btn)));
+      setTimeout(()=>speak(m.voice),420);
+    }
+    function choose(i,btn) {
+      if (locked) return;
+      const m=missions[index], a=m.answers[i];
+      if (!a.correct) {
+        btn.classList.add("retry");
+        $("feedback").className="feedback retry-msg";
+        $("feedback").innerHTML="<p>🌟 差一点点，换一扇门试试</p>";
+        speak("差一点点。看看是哪一个语言世界，再试一次。");
+        setTimeout(()=>{btn.classList.remove("retry");$("feedback").className="feedback";$("feedback").innerHTML="<p>💡 看颜色也能找到线索</p>";},900);
+        return;
+      }
+      locked=true; btn.classList.add("right"); energy=Math.min(100,energy+25);
+      $("energyNumber").textContent=energy; $("energyBar").style.width=energy+"%";
+      $("feedback").className="feedback good";
+      $("feedback").innerHTML=`<p>✨ <b>光能量 +25</b> ${m.helper}</p><button class="next" id="next">${index===missions.length-1?"领取徽章":"下一项任务"} →</button>`;
+      speak("答对啦！"+m.helper);
+      $("next").addEventListener("click",()=>{
+        if(index===missions.length-1){show("result");speak("任务完成！桃桃获得光之语言小战士徽章！");}
+        else {index++;render();}
+      });
+    }
+    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，光之语言任务启动！"); }
+    $("start").addEventListener("click",begin);
+    $("again").addEventListener("click",begin);
+    $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
+    $("resultHome").addEventListener("click",()=>show("home"));
+    $("voice").addEventListener("click",()=>speak(missions[index].voice));
+    $("sound").addEventListener("click",()=>{
+      muted=!muted; $("sound").textContent=muted?"🔇":"🔊";
+      $("sound").setAttribute("aria-label",muted?"打开声音":"关闭声音");
+      speechSynthesis?.cancel();
+    });
+    const stars=$("stars");
+    for(let i=0;i<18;i++){
+      const s=document.createElement("i");
+      s.style.left=((i*37+7)%96)+"%";s.style.top=((i*53+4)%92)+"%";
+      const size=i%3===0?4:2;s.style.width=size+"px";s.style.height=size+"px";
+      s.style.animationDelay=((i%6)*.55)+"s";stars.appendChild(s);
+    }
+  </script>
+</body>
+</html>
