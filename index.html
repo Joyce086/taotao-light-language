@@ -578,8 +578,8 @@
         const name=v.name.toLowerCase();
         let value=v.lang.toLowerCase()==="zh-cn"?50:20;
         if(/natural|premium|online|neural/.test(name)) value+=40;
-        if(/xiaoxiao|xiaoyi|tingting|ting-ting|yu-shu|meijia|mei-jia|sinji|sin-ji|sandy|flo|shelley|婷婷|晓晓|小艺|美佳|善怡/.test(name)) value+=90;
-        if(/yunxi|yunyang|eddy|reed|rocko|grandpa|male/.test(name)) value-=120;
+        if(/xiaoxiao|xiaoyi|tingting|ting-ting|yu-shu|meijia|mei-jia|sinji|sin-ji|婷婷|晓晓|小艺|美佳|善怡/.test(name)) value+=90;
+        if(/yunxi|yunyang|eddy|reed|rocko|grandpa|male|sandy|flo|shelley/.test(name)) value-=120;
         if(!v.localService) value+=8;
         return value;
       };
@@ -588,12 +588,13 @@
     function speak(text,mood="guide") {
       if (muted || !("speechSynthesis" in window)) return;
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      const connectedText=text.replace(/[，。！？；：、,.!?;:]/g," ").replace(/\s+/g," ").trim();
+      const u = new SpeechSynthesisUtterance(connectedText);
       u.lang="zh-CN";
       const voice=friendlyChineseVoice();
       if(voice) u.voice=voice;
-      u.rate=mood==="celebrate"?.9:mood==="gentle"?.86:.88;
-      u.pitch=.98; u.volume=.92;
+      u.rate=mood==="gentle"?.96:.99;
+      u.pitch=1; u.volume=.94;
       speechSynthesis.speak(u);
     }
     function successChime() {
