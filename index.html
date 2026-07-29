@@ -169,7 +169,8 @@
     .track { height:8px; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:999px; background:rgba(255,255,255,.06); }
     .track span {
       display:block; width:0; height:100%; border-radius:inherit;
-      background:linear-gradient(90deg,#48d5ff,#806cff,#ffcf67); box-shadow:0 0 12px #75cbff;
+      background:linear-gradient(90deg,#ef4559,#70e8ff 45%,#806cff 72%,#ffcf67);
+      box-shadow:0 0 12px #75cbff;
       transition:width .65s cubic-bezier(.2,.8,.2,1);
     }
     .count { color:#8490b6; font-size:12px; font-weight:800; }
@@ -180,7 +181,9 @@
     .mentor-face {
       flex:0 0 auto; width:37px; height:37px; display:grid; place-items:center;
       border:1px solid rgba(118,229,255,.5); border-radius:50% 50% 43% 43%;
-      background:linear-gradient(145deg,#3456b0,#20245d); color:var(--cyan);
+      background:radial-gradient(circle at 50% 72%,#6eebff 0 10%,transparent 11%),
+                 linear-gradient(145deg,#f3f6ff 0 46%,#d83d51 47% 63%,#28356f 64%);
+      color:var(--cyan);
     }
     .mentor p { min-width:0; flex:1; margin:0; }
     .mentor b,.mentor span { display:block; }
@@ -343,6 +346,18 @@
       font-size:13px; letter-spacing:.03em;
     }
     .mascot-stage { width:min(100%,310px); height:188px; position:relative; margin:12px auto 4px; }
+    .mascot-stage::before {
+      content:""; position:absolute; left:50%; bottom:3px; width:164px; height:164px;
+      border:2px solid rgba(101,232,255,.34); border-radius:50%;
+      box-shadow:0 0 28px rgba(101,232,255,.22),inset 0 0 24px rgba(107,77,255,.14);
+      transform:translateX(-50%); animation:heroEnergySpin 8s linear infinite;
+    }
+    .mascot-stage::after {
+      content:""; position:absolute; left:50%; bottom:67px; width:235px; height:3px;
+      border-radius:999px; background:linear-gradient(90deg,transparent,#65e8ff,white,#65e8ff,transparent);
+      box-shadow:0 0 17px #65e8ff; transform:translateX(-50%) rotate(-8deg); opacity:.56;
+    }
+    @keyframes heroEnergySpin { to { transform:translateX(-50%) rotate(360deg); } }
     .speech-bubble {
       position:absolute; top:0; left:50%; z-index:5; padding:9px 14px;
       border:1px solid rgba(101,232,255,.28); border-radius:18px;
@@ -358,7 +373,7 @@
     }
     .letter-friend {
       position:absolute; bottom:10px; z-index:3; width:66px; height:78px;
-      display:grid; place-items:center; align-content:center; border:4px solid white;
+      display:grid; place-items:center; align-content:center; border:3px solid rgba(226,238,255,.94);
       border-radius:25px 25px 29px 29px; box-shadow:0 11px 0 rgba(60,82,129,.09); color:white;
     }
     .letter-friend b { font-size:38px; line-height:.95; }
@@ -372,32 +387,41 @@
     @keyframes peachBob { 50% { transform:translateX(-50%) translateY(-4px) rotate(1deg); } }
     .peach-cape {
       position:absolute; right:0; bottom:9px; width:87px; height:88px; border:3px solid white;
-      border-radius:18% 66% 46% 52%; background:#6b79df; transform:rotate(12deg);
+      border-radius:18% 66% 46% 52%; background:linear-gradient(145deg,#f14d5d,#9d1838); transform:rotate(12deg);
     }
     .peach-body {
       position:absolute; bottom:12px; left:3px; z-index:2; width:106px; height:101px;
-      border:4px solid white; border-radius:52% 48% 50% 50% / 45% 46% 58% 58%;
-      background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.72) 0 7%,transparent 7.8%),
-                 linear-gradient(145deg,#ffb386,#ff7e9e 74%);
-      box-shadow:0 12px 0 rgba(77,88,138,.1);
+      border:3px solid #f4f7ff; border-radius:52% 48% 50% 50% / 45% 46% 58% 58%;
+      background:linear-gradient(62deg,transparent 0 26%,#e83f52 27% 38%,transparent 39%),
+                 linear-gradient(-62deg,transparent 0 26%,#e83f52 27% 38%,transparent 39%),
+                 radial-gradient(circle at 34% 26%,rgba(255,255,255,.88) 0 6%,transparent 6.8%),
+                 linear-gradient(145deg,#f8fbff,#aebbd5 72%);
+      box-shadow:0 12px 0 rgba(77,88,138,.1),0 0 22px rgba(101,232,255,.14);
     }
-    .peach-leaf { position:absolute; top:12px; z-index:3; width:43px; height:23px; border:3px solid white; background:#58c98b; }
-    .peach-leaf.left { left:25px; border-radius:80% 10% 80% 12%; transform:rotate(22deg); }
-    .peach-leaf.right { left:58px; border-radius:10% 80% 12% 80%; background:#76d78e; transform:rotate(-19deg); }
+    .peach-leaf {
+      position:absolute; top:12px; z-index:3; width:43px; height:23px;
+      border:2px solid #f5f8ff; background:linear-gradient(145deg,#f8fbff,#b9c6de);
+    }
+    .peach-leaf.left { left:25px; border-radius:90% 12% 70% 18%; transform:rotate(34deg); }
+    .peach-leaf.right {
+      left:58px; border-radius:12% 90% 18% 70%;
+      background:linear-gradient(145deg,#f8fbff,#b9c6de); transform:rotate(-31deg);
+    }
     .peach-eye,.peach-cheek { position:absolute; display:block; border-radius:50%; }
-    .peach-eye { top:39px; width:8px; height:11px; background:#593c59; }
+    .peach-eye { top:39px; width:8px; height:11px; background:#78edff; box-shadow:0 0 10px #65e8ff; }
     .peach-eye.left,.peach-cheek.left { left:29px; }
     .peach-eye.right,.peach-cheek.right { right:29px; }
-    .peach-cheek { top:53px; width:14px; height:7px; background:rgba(232,80,116,.35); }
+    .peach-cheek { top:53px; width:14px; height:7px; background:rgba(224,57,75,.26); }
     .peach-smile {
       position:absolute; top:51px; left:50%; width:18px; height:12px;
-      border-right:3px solid #673c59; border-bottom:3px solid #673c59;
+      border-right:3px solid #4c5066; border-bottom:3px solid #4c5066;
       border-radius:0 0 12px; transform:translateX(-50%) rotate(45deg);
     }
     .peach-body b {
-      position:absolute; bottom:8px; left:50%; width:31px; height:26px; display:grid;
-      place-items:center; border:2px solid rgba(255,255,255,.76); border-radius:10px;
-      background:#fff2b8; color:#d65a76; font-size:13px; transform:translateX(-50%);
+      position:absolute; bottom:8px; left:50%; width:25px; height:25px; display:grid;
+      place-items:center; border:2px solid rgba(255,255,255,.9); border-radius:50%;
+      background:radial-gradient(circle,#c9fbff,#47cfe9 62%,#2671ca);
+      color:transparent; font-size:0; box-shadow:0 0 13px #65e8ff; transform:translateX(-50%);
     }
     .cute-kicker { margin:0 0 8px; color:var(--cyan); font-size:13px; letter-spacing:.05em; }
     .cute-home h1 { color:var(--ink); font-size:clamp(32px,9vw,48px); line-height:1.12; }
@@ -429,8 +453,8 @@
     .cute-world small { color:#9ca9cf; font-size:10px; }
     .cute-start {
       min-height:65px; padding-left:24px; border:1px solid rgba(255,255,255,.16);
-      border-radius:25px; background:linear-gradient(105deg,#2b83f5,#6256f8 55%,#965eea);
-      color:white; box-shadow:0 16px 42px rgba(68,89,236,.3),inset 0 1px rgba(255,255,255,.35);
+      border-radius:25px; background:linear-gradient(105deg,#d92e47,#ef5360 48%,#6878d9);
+      color:white; box-shadow:0 16px 42px rgba(218,51,77,.26),inset 0 1px rgba(255,255,255,.35);
     }
     .cute-start span { display:inline; margin-right:6px; color:inherit; font-size:17px; }
     .cute-start b { display:inline; font-size:20px; }
@@ -461,9 +485,9 @@
       <div class="home-cloud one" aria-hidden="true"></div>
       <div class="home-cloud two" aria-hidden="true"></div>
       <div class="home-sparkles" aria-hidden="true"><span>★</span><span>✦</span><span>●</span><span>★</span></div>
-      <div class="pill cute-pill">🍑 桃桃的小游戏</div>
+      <div class="pill cute-pill">⚡ 桃桃的光之英雄任务</div>
       <div class="mascot-stage" aria-hidden="true">
-        <div class="speech-bubble">桃桃，我们出发吧！<i></i></div>
+        <div class="speech-bubble">桃桃，变身出发！<i></i></div>
         <div class="letter-friend letter-a"><b>A</b><span>•ᴗ•</span></div>
         <div class="peach-mascot">
           <div class="peach-leaf left"></div><div class="peach-leaf right"></div>
@@ -476,15 +500,15 @@
         </div>
         <div class="letter-friend letter-pinyin"><b>a</b><span>•ᴗ•</span></div>
       </div>
-      <p class="kicker cute-kicker">今天的字母宝宝在等你</p>
-      <h1>帮字母宝宝<br><span>找到自己的家！</span></h1>
-      <p class="home-copy">蓝色是英文小屋，紫色是拼音小屋</p>
+      <p class="kicker cute-kicker">字母能量正在召唤你</p>
+      <h1>守护字母宝宝<br><span>找到自己的能量门！</span></h1>
+      <p class="home-copy">蓝色英文能量，紫色拼音能量</p>
       <div class="worlds cute-worlds">
-        <div class="world en cute-world"><span class="world-icon">A</span><span><b>英文小屋</b><small>Apple 🍎</small></span></div>
-        <div class="world py cute-world"><span class="world-icon">a</span><span><b>拼音小屋</b><small>阿姨 👩</small></span></div>
+        <div class="world en cute-world"><span class="world-icon">A</span><span><b>英文能量门</b><small>Apple 🍎</small></span></div>
+        <div class="world py cute-world"><span class="world-icon">a</span><span><b>拼音能量门</b><small>阿姨 👩</small></span></div>
       </div>
-      <button class="primary cute-start" id="start"><span>⭐</span><b>一起去闯关</b><i>›</i></button>
-      <p class="note cute-note">每次玩一小会儿 · 轻松学会不混淆</p>
+      <button class="primary cute-start" id="start"><span>⚡</span><b>光之变身</b><i>›</i></button>
+      <p class="note cute-note">收集光能量 · 成为语言小英雄</p>
     </section>
 
     <section class="screen" id="mission">
@@ -658,7 +682,7 @@
         else {index++;render();}
       });
     }
-    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，准备好了吗？我们一起出发吧。","gentle"); }
+    function begin() { index=0;energy=0;show("mission");render();speak("桃桃准备好了吗 光之变身 一起出发吧","gentle"); }
     $("start").addEventListener("click",begin);
     $("again").addEventListener("click",begin);
     $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
