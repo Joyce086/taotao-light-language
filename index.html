@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta name="theme-color" content="#75d4f6">
+  <meta name="theme-color" content="#090a24">
   <meta name="description" content="为桃桃设计的英文与拼音启蒙小游戏">
   <title>桃桃的光之语言任务</title>
   <style>
@@ -289,25 +289,25 @@
       .emoji { font-size:26px; }
     }
     .app.home-mode {
-      color:#263459;
+      color:var(--ink);
       background:
-        radial-gradient(circle at 84% 14%,rgba(255,255,255,.82) 0 4%,transparent 4.4%),
-        linear-gradient(180deg,#75d4f6 0%,#c9f2ff 58%,#fff3c7 100%);
+        radial-gradient(circle at 50% -10%,rgba(71,104,255,.25),transparent 40%),
+        linear-gradient(180deg,#0c0c30 0%,#07081f 55%,#050617 100%);
     }
     .app.home-mode::before {
-      opacity:.38;
+      opacity:.52;
       background-image:
-        radial-gradient(circle,rgba(255,255,255,.72) 0 2px,transparent 2.5px),
-        radial-gradient(circle,rgba(255,255,255,.5) 0 1px,transparent 1.5px);
-      background-position:0 0,24px 24px; background-size:48px 48px;
-      mask-image:linear-gradient(to bottom,black,transparent 64%);
+        linear-gradient(rgba(119,132,224,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(119,132,224,.035) 1px,transparent 1px);
+      background-size:48px 48px;
+      mask-image:linear-gradient(to bottom,transparent,black 24%,black 74%,transparent);
     }
-    .home-mode .glow { opacity:.18; filter:blur(75px); }
-    .home-mode .glow.one { background:#fff7b5; }
-    .home-mode .glow.two { background:#ff98be; }
+    .home-mode .glow { opacity:.14; filter:blur(65px); }
+    .home-mode .glow.one { background:#2bbfff; }
+    .home-mode .glow.two { background:#8d5bff; }
     .home-mode .sound {
-      border:2px solid rgba(255,255,255,.78); background:rgba(255,255,255,.66);
-      color:#40517a; box-shadow:0 7px 18px rgba(62,125,162,.13);
+      border:1px solid rgba(255,255,255,.12); background:rgba(14,17,46,.68);
+      color:white; box-shadow:none;
     }
     .cute-home {
       position:relative; z-index:1; justify-content:center;
@@ -316,7 +316,8 @@
     }
     .home-cloud {
       position:absolute; z-index:-1; width:95px; height:32px; border-radius:999px;
-      background:rgba(255,255,255,.78); filter:drop-shadow(0 8px 14px rgba(73,139,171,.08));
+      border:1px solid rgba(101,232,255,.2); background:rgba(76,114,211,.16);
+      filter:drop-shadow(0 8px 18px rgba(34,117,196,.18));
       animation:cloudFloat 5s ease-in-out infinite;
     }
     .home-cloud::before,.home-cloud::after {
@@ -337,20 +338,22 @@
     .home-sparkles span:nth-child(4) { top:54%; right:4%; animation-delay:-1.8s; }
     @keyframes sparkleBob { 50% { transform:translateY(-5px) rotate(12deg) scale(1.18); } }
     .cute-pill {
-      padding:8px 14px; border:3px solid rgba(255,255,255,.82); background:#fff9e8;
-      color:#884f68; box-shadow:0 8px 20px rgba(102,111,155,.12);
+      padding:8px 14px; border:1px solid rgba(101,232,255,.2); background:rgba(28,37,90,.72);
+      color:#cad7f7; box-shadow:0 8px 24px rgba(0,0,0,.16);
       font-size:13px; letter-spacing:.03em;
     }
     .mascot-stage { width:min(100%,310px); height:188px; position:relative; margin:12px auto 4px; }
     .speech-bubble {
       position:absolute; top:0; left:50%; z-index:5; padding:9px 14px;
-      border:3px solid #fff; border-radius:18px; background:#fffdf6; color:#744f62;
-      box-shadow:0 8px 18px rgba(79,108,147,.14); font-size:12px; font-weight:800;
+      border:1px solid rgba(101,232,255,.28); border-radius:18px;
+      background:rgba(24,31,78,.94); color:#dce7ff;
+      box-shadow:0 8px 22px rgba(0,0,0,.24); font-size:12px; font-weight:800;
       white-space:nowrap; transform:translateX(-50%) rotate(-2deg);
     }
     .speech-bubble i {
       position:absolute; bottom:-10px; left:50%; width:16px; height:16px;
-      border-right:3px solid white; border-bottom:3px solid white; background:#fffdf6;
+      border-right:1px solid rgba(101,232,255,.28);
+      border-bottom:1px solid rgba(101,232,255,.28); background:#171e4b;
       transform:translateX(-50%) rotate(45deg);
     }
     .letter-friend {
@@ -396,32 +399,43 @@
       place-items:center; border:2px solid rgba(255,255,255,.76); border-radius:10px;
       background:#fff2b8; color:#d65a76; font-size:13px; transform:translateX(-50%);
     }
-    .cute-kicker { margin:0 0 8px; color:#6d64a0; font-size:13px; letter-spacing:.05em; }
-    .cute-home h1 { color:#29365d; font-size:clamp(32px,9vw,48px); line-height:1.12; }
-    .cute-home h1 span { background:none; color:#f15f83; text-shadow:0 3px 0 rgba(255,255,255,.62); }
-    .cute-home .home-copy { margin:11px 0 15px; color:#69779a; font-size:14px; line-height:1.55; }
+    .cute-kicker { margin:0 0 8px; color:var(--cyan); font-size:13px; letter-spacing:.05em; }
+    .cute-home h1 { color:var(--ink); font-size:clamp(32px,9vw,48px); line-height:1.12; }
+    .cute-home h1 span {
+      background:linear-gradient(90deg,#9cecff 5%,#bda3ff 52%,#ffe09a);
+      background-clip:text; color:transparent; text-shadow:none;
+    }
+    .cute-home .home-copy { margin:11px 0 15px; color:var(--muted); font-size:14px; line-height:1.55; }
     .cute-worlds { gap:11px; margin-bottom:15px; }
     .cute-world {
-      min-height:66px; padding:10px 12px; border:3px solid rgba(255,255,255,.84);
-      border-radius:22px; box-shadow:0 9px 0 rgba(63,83,136,.08);
+      min-height:66px; padding:10px 12px; border:1px solid;
+      border-radius:22px; box-shadow:inset 0 1px rgba(255,255,255,.06);
     }
-    .cute-world.en { background:#e8f7ff; color:#316db5; }
-    .cute-world.py { background:#f2eaff; color:#7350aa; }
+    .cute-world.en {
+      border-color:rgba(101,232,255,.3);
+      background:linear-gradient(145deg,rgba(38,103,190,.32),rgba(14,28,70,.62));
+      color:#d9f8ff;
+    }
+    .cute-world.py {
+      border-color:rgba(172,127,255,.3);
+      background:linear-gradient(145deg,rgba(107,77,255,.3),rgba(38,23,89,.62));
+      color:#eee5ff;
+    }
     .cute-world .world-icon {
-      width:43px; height:43px; border-radius:15px; background:white; color:currentColor;
-      box-shadow:0 4px 10px rgba(67,93,140,.11);
+      width:43px; height:43px; border-radius:15px; background:rgba(255,255,255,.1);
+      color:currentColor; box-shadow:0 4px 12px rgba(0,0,0,.12);
     }
     .cute-world b { font-size:14px; }
-    .cute-world small { color:#7f88a5; font-size:10px; }
+    .cute-world small { color:#9ca9cf; font-size:10px; }
     .cute-start {
-      min-height:65px; padding-left:24px; border:4px solid rgba(255,255,255,.78);
-      border-radius:25px; background:linear-gradient(105deg,#ffd66f,#ffac6c); color:#67414b;
-      box-shadow:0 11px 0 #ed7890,0 18px 28px rgba(156,88,115,.2);
+      min-height:65px; padding-left:24px; border:1px solid rgba(255,255,255,.16);
+      border-radius:25px; background:linear-gradient(105deg,#2b83f5,#6256f8 55%,#965eea);
+      color:white; box-shadow:0 16px 42px rgba(68,89,236,.3),inset 0 1px rgba(255,255,255,.35);
     }
     .cute-start span { display:inline; margin-right:6px; color:inherit; font-size:17px; }
     .cute-start b { display:inline; font-size:20px; }
-    .cute-start i { border-radius:50%; background:rgba(255,255,255,.48); color:#8c5261; font-size:28px; }
-    .cute-note { margin-top:17px; color:#6c7590; font-size:11px; }
+    .cute-start i { border-radius:50%; background:rgba(255,255,255,.16); color:white; font-size:28px; }
+    .cute-note { margin-top:17px; color:#747fa8; font-size:11px; }
     @media(max-width:440px) {
       .cute-home { padding-top:max(16px,env(safe-area-inset-top)); }
       .mascot-stage { height:175px; margin-top:8px; }
@@ -559,11 +573,16 @@
     };
     function friendlyChineseVoice() {
       if (!("speechSynthesis" in window)) return;
-      const voices=speechSynthesis.getVoices();
-      const preferred=/ting|yu-shu|meijia|mei-jia|sinji|sin-ji|xiaoxiao|xiaoyi|xiaohan|xiaomeng|婷婷|晓晓|小艺/i;
-      return voices.find(v=>v.lang.toLowerCase().startsWith("zh")&&preferred.test(v.name))
-        || voices.find(v=>v.lang.toLowerCase()==="zh-cn")
-        || voices.find(v=>v.lang.toLowerCase().startsWith("zh"));
+      const voices=speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith("zh"));
+      const score=v=>{
+        const name=v.name.toLowerCase();
+        let value=v.lang.toLowerCase()==="zh-cn"?50:20;
+        if(/natural|premium|online|neural/.test(name)) value+=45;
+        if(/xiaoxiao|xiaoyi|tingting|ting-ting|google|婷婷|晓晓|小艺/.test(name)) value+=35;
+        if(!v.localService) value+=8;
+        return value;
+      };
+      return voices.sort((a,b)=>score(b)-score(a))[0];
     }
     function speak(text,mood="guide") {
       if (muted || !("speechSynthesis" in window)) return;
@@ -572,8 +591,8 @@
       u.lang="zh-CN";
       const voice=friendlyChineseVoice();
       if(voice) u.voice=voice;
-      u.rate=mood==="celebrate"?.96:mood==="gentle"?.84:.88;
-      u.pitch=mood==="celebrate"?1.28:mood==="gentle"?1.16:1.12;
+      u.rate=mood==="celebrate"?.92:mood==="gentle"?.86:.88;
+      u.pitch=mood==="celebrate"?1.06:1;
       speechSynthesis.speak(u);
     }
     function successChime() {
@@ -619,7 +638,7 @@
         btn.classList.add("retry");
         $("feedback").className="feedback retry-msg";
         $("feedback").innerHTML="<p>🌟 差一点点，换一扇门试试</p>";
-        speak("没关系，我们再找一找。","gentle");
+        speak("没关系呀，我们再找找看。","gentle");
         setTimeout(()=>{btn.classList.remove("retry");$("feedback").className="feedback";$("feedback").innerHTML="<p>💡 看颜色也能找到线索</p>";},900);
         return;
       }
@@ -628,16 +647,16 @@
       $("feedback").className="feedback good";
       $("feedback").innerHTML=`<p>✨ <b>光能量 +25</b> ${m.helper}</p><button class="next" id="next">${index===missions.length-1?"领取徽章":"下一项任务"} →</button>`;
       successChime();
-      setTimeout(()=>speak("哇，答对啦！桃桃真棒！","celebrate"),220);
+      setTimeout(()=>speak("哇，桃桃答对啦！","celebrate"),320);
       $("next").addEventListener("click",()=>{
         if(index===missions.length-1){
           show("result"); successChime();
-          setTimeout(()=>speak("太棒啦！桃桃闯关成功，获得小战士徽章！","celebrate"),220);
+          setTimeout(()=>speak("太棒啦，桃桃闯关成功！耶！","celebrate"),320);
         }
         else {index++;render();}
       });
     }
-    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，我们去帮字母宝宝找家吧！","celebrate"); }
+    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，准备好了吗？我们出发！","celebrate"); }
     $("start").addEventListener("click",begin);
     $("again").addEventListener("click",begin);
     $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
