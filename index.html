@@ -577,8 +577,9 @@
       const score=v=>{
         const name=v.name.toLowerCase();
         let value=v.lang.toLowerCase()==="zh-cn"?50:20;
-        if(/natural|premium|online|neural/.test(name)) value+=45;
-        if(/xiaoxiao|xiaoyi|tingting|ting-ting|google|婷婷|晓晓|小艺/.test(name)) value+=35;
+        if(/natural|premium|online|neural/.test(name)) value+=40;
+        if(/xiaoxiao|xiaoyi|tingting|ting-ting|yu-shu|meijia|mei-jia|sinji|sin-ji|sandy|flo|shelley|婷婷|晓晓|小艺|美佳|善怡/.test(name)) value+=90;
+        if(/yunxi|yunyang|eddy|reed|rocko|grandpa|male/.test(name)) value-=120;
         if(!v.localService) value+=8;
         return value;
       };
@@ -591,8 +592,8 @@
       u.lang="zh-CN";
       const voice=friendlyChineseVoice();
       if(voice) u.voice=voice;
-      u.rate=mood==="celebrate"?.92:mood==="gentle"?.86:.88;
-      u.pitch=mood==="celebrate"?1.06:1;
+      u.rate=mood==="celebrate"?.9:mood==="gentle"?.86:.88;
+      u.pitch=.98; u.volume=.92;
       speechSynthesis.speak(u);
     }
     function successChime() {
@@ -638,7 +639,7 @@
         btn.classList.add("retry");
         $("feedback").className="feedback retry-msg";
         $("feedback").innerHTML="<p>🌟 差一点点，换一扇门试试</p>";
-        speak("没关系呀，我们再找找看。","gentle");
+        speak("没关系呀，我们慢慢来，再找一找。","gentle");
         setTimeout(()=>{btn.classList.remove("retry");$("feedback").className="feedback";$("feedback").innerHTML="<p>💡 看颜色也能找到线索</p>";},900);
         return;
       }
@@ -647,16 +648,16 @@
       $("feedback").className="feedback good";
       $("feedback").innerHTML=`<p>✨ <b>光能量 +25</b> ${m.helper}</p><button class="next" id="next">${index===missions.length-1?"领取徽章":"下一项任务"} →</button>`;
       successChime();
-      setTimeout(()=>speak("哇，桃桃答对啦！","celebrate"),320);
+      setTimeout(()=>speak("嗯，答对啦。桃桃真棒。","gentle"),360);
       $("next").addEventListener("click",()=>{
         if(index===missions.length-1){
           show("result"); successChime();
-          setTimeout(()=>speak("太棒啦，桃桃闯关成功！耶！","celebrate"),320);
+          setTimeout(()=>speak("桃桃真棒，闯关成功啦。","gentle"),360);
         }
         else {index++;render();}
       });
     }
-    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，准备好了吗？我们出发！","celebrate"); }
+    function begin() { index=0;energy=0;show("mission");render();speak("桃桃，准备好了吗？我们一起出发吧。","gentle"); }
     $("start").addEventListener("click",begin);
     $("again").addEventListener("click",begin);
     $("back").addEventListener("click",()=>{speechSynthesis?.cancel();show("home");});
